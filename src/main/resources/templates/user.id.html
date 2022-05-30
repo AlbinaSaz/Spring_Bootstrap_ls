@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table th:border="1">
+    <tr>
+        <th>Username</th>
+        <th>Password</th>
+    </tr>
+
+    <td><p th:text="${user.getUsername()}">VALUE</p></td>
+    <td><p th:text="${user.getPassword()}">VALUE</p></td>
+
+</table>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="EXIT">
+</form>
+</body>
+</html>
