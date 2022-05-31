@@ -1,32 +1,24 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"></html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"></html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title> Person</title>
 </head>
-
 <body>
+    <table th:border="1">
+        <p th:text="${user.getUsername()}">VALUE</p>
+        <p th:text="${user.getPassword()}">VALUE</p>
 
-<table th:border="1">
-<tr>
-    <th>Username</th>
-    <th>Password</th>
-</tr>
+        <a th:href="@{{id}/update(id=${user.getId()})}"><input type="submit" value="Update"></a>
 
-<td><p th:text="${user.getUsername()}">VALUE</p></td>
-<td><p th:text="${user.getPassword()}">VALUE</p></td>
+        <form th:method="DELETE" th:action="@{{id}(id=${user.getId()})}">
+        <input type="submit" value="Delete"/>
+        </form>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="EXIT">
+        </form>
 
-</table>
-</br>
-<a th:href="@{{id}/update(id=${user.getId()})}"><input type="submit" value="Update"></a>
-</br>
-<form th:method="DELETE" th:action="@{{id}(id=${user.getId()})}">
-    <input type="submit" value="Delete"/>
-</form>
-</br>
-<form th:action="@{/logout}" method="post">
-    <input type="submit" value="EXIT">
-</form>
+    </table>
 </body>
 </html>
