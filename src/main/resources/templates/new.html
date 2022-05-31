@@ -17,11 +17,21 @@
     <label for="password">Enter password: </label>
     <input type="text" th:field="*{password}" id="password"/>
 
+    <div class="col-1.5">
+        <label th:for="roles"> User Type: </label>
+        <select class="form-control" name="initializeRoles" id="initializeRoles">
+            <option th:each="initializeRoles:${roles}"
+                    th:value="${initializeRoles.id}"
+                    th:text="${initializeRoles.authority}">
+            </option>
+        </select>
+    </div>
+
     <input type="submit" value="create!">
     <form th:action="@{/logout}" method="post">
         <input type="submit" value="EXIT">
     </form>
-    </div>
+    </select>
 </form>
 </body>
 </html>

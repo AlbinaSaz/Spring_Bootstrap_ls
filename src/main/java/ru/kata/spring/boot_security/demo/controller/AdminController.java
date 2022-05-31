@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.Service.UserService;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.repozitory.RoleRepository;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -15,6 +18,8 @@ import java.util.Set;
 public class AdminController {
     @Autowired
     UserService userService;
+    @Autowired
+    RoleRepository roleRepository;
 
     @GetMapping()
     public String users(Model model) {
@@ -24,6 +29,8 @@ public class AdminController {
 
     @GetMapping("new")
     public String newPerson(Model model) {
+        List<Role> roles1 = roleRepository.findAll();
+        model.addAttribute("roles", roles1);
         model.addAttribute("user", new User());
         return "new";
     }

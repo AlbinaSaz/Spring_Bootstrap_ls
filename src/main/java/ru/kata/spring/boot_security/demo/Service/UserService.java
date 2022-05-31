@@ -25,13 +25,11 @@ public class UserService implements UserServiceInt {
     @Override
     public void save(User user) {
         user.setEnabled(true);
-        Set<Role> roleSet = new HashSet<>();
-        roleSet.add(roleRepository.findById(1).get());
-        user.setRoles(roleSet);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        ;
+        user.setRoles(user.getRoles());
         userRepository.save(user);
     }
+
 
 
     @Transactional
