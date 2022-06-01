@@ -11,23 +11,18 @@ import java.util.Set;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
-    @Column
+
+    @Column(nullable = false)
     private String username;
     @Column
     private String password;
     @Column
     private boolean enabled;
-    @ManyToMany(cascade = {
-            CascadeType.DETACH,
-            CascadeType.MERGE,
-            CascadeType.REFRESH,
-            CascadeType.PERSIST
-    })
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "users_id"),
-            inverseJoinColumns = @JoinColumn(name = "authorities_id"))
+            inverseJoinColumns =@JoinColumn(name = "authorities_id"))
     private Set<Role> roles;
 
     public Set<Role> getRoles() {

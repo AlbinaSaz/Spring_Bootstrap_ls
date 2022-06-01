@@ -6,17 +6,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.repozitory.RoleRepository;
 import ru.kata.spring.boot_security.demo.repozitory.UserRepository;
 
 @Component
 public class MyUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
+
     @Autowired
     public MyUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
-    }
 
+    }
 
     @Transactional
     @Override
