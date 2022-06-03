@@ -5,15 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.Service.UserService;
-import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.Service.UserServiceImt;
 
 @Controller
 @RequestMapping("/user")
 public class ControllerUser {
     //
     @Autowired
-    private UserService userService;
+    private UserServiceImt userService;
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {

@@ -1,25 +1,25 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.Service.UserService;
+import ru.kata.spring.boot_security.demo.Service.UserServiceImt;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repozitory.RoleRepository;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
-    @Autowired
-    UserService userService;
-    @Autowired
-    RoleRepository roleRepository;
+    private final UserServiceImt userService;
+    private final RoleRepository roleRepository;
 
     @GetMapping()
     public String users(Model model) {
@@ -36,7 +36,17 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String create(@ModelAttribute("user") User user) {
+    public String create(@ModelAttribute("user") User user,
+                         @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
+        Set<Role> roleSet = new HashSet<>();
+        if (userRole.contains("ROLE_ADMIN")) {
+            roleSet.add(roleRepository.findById(2).get());
+            user.setRoles(roleSet);
+        }
+        if (userRole.contains("ROLE_USER")) {
+            roleSet.add(roleRepository.findById(1).get());
+            user.setRoles(roleSet);
+        }
         userService.save(user);
         return "redirect:/admin";
     }

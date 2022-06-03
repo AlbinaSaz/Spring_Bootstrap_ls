@@ -20,6 +20,15 @@
             <input type="text" th:field="*{password}" id="password"/>
         </td>
 
+        <td>
+            <label for="city">Enter city: </label>
+            <input type="text" th:field="*{city}" id="city"/>
+        </td>
+        <td>
+            <label for="age">Enter age: </label>
+            <input type="text" th:field="*{age}" id="age"/>
+        </td>
+
         <input type="submit" value="update!">
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="EXIT">

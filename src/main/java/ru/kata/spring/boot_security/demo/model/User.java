@@ -1,11 +1,17 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -17,54 +23,43 @@ public class User implements UserDetails {
     private String username;
     @Column
     private String password;
+
+    @Column
+    private String city;
+
+    @Column
+    private int age;
     @Column
     private boolean enabled;
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(cascade =
+            {       CascadeType.DETACH,
+                    CascadeType.MERGE,
+                    CascadeType.REFRESH,
+                    CascadeType.PERSIST
+            })
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "users_id"),
-            inverseJoinColumns =@JoinColumn(name = "authorities_id"))
-    private Set<Role> roles;
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
+            inverseJoinColumns = @JoinColumn(name = "authorities_id"))
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(int id, String username, String password, boolean enabled, Set<Role> roles) {
+    public User(int id, String username, String password, String city, int age) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.enabled = enabled;
-        this.roles = roles;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.city = city;
+        this.age = age;
     }
 
 
     @Override
-    public Collection<Role> getAuthorities() {
-
-        return roles;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
     }
 
     @Override
@@ -80,10 +75,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     @Override

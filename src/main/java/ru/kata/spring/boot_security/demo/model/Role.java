@@ -1,12 +1,15 @@
 package ru.kata.spring.boot_security.demo.model;
 
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
+@Data
 @Entity
-@Table (name = "authorities")
+@Table(name = "authorities")
 public class Role implements GrantedAuthority {
 
     @Id
@@ -18,45 +21,10 @@ public class Role implements GrantedAuthority {
     @Column
     private String Username;
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();
 
-    public Set<User> getUsers() {
-        return users;
-    }
+    public Role() {}
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    public Role() {
-    }
-
-    public Role(int id, String authority, String username, Set<User> users) {
-        this.id = id;
-        this.authority = authority;
-        Username = username;
-        this.users = users;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return Username;
-    }
-
-    public void setUsername(String username) {
-        Username = username;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setAuthority(String role) {
-        this.authority = authority;
-    }
 
     @Override
     public String getAuthority() {

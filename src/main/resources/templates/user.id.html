@@ -10,10 +10,14 @@
     <tr>
         <th>Username</th>
         <th>Password</th>
+        <th>getAge</th>
+        <th>getCity</th>
     </tr>
 
     <td><p th:text="${user.getUsername()}">VALUE</p></td>
     <td><p th:text="${user.getPassword()}">VALUE</p></td>
+    <td><p th:text="${user.getAge()}">VALUE</p></td>
+    <td><p th:text="${user.getCity()}">VALUE</p></td>
 
 </table>
 <form th:action="@{/logout}" method="post">

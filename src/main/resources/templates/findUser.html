@@ -8,7 +8,8 @@
 <body>
     <table th:border="1">
         <p th:text="${user.getUsername()}">VALUE</p>
-        <p th:text="${user.getPassword()}">VALUE</p>
+        <p th:text="${user.getAge()}">VALUE</p>
+        <p th:text="${user.getCity()}">VALUE</p>
 
         <a th:href="@{{id}/update(id=${user.getId()})}"><input type="submit" value="Update"></a>
 
