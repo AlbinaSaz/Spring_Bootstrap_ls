@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repozitory.UserRepository;
+import ru.kata.spring.boot_security.demo.repository.RoleRepository;
+import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
@@ -19,6 +20,7 @@ import java.util.Set;
 public class UserServiceImt implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostConstruct
@@ -38,6 +40,13 @@ public class UserServiceImt implements UserService {
         userRepository.save(user1);
     }
 
+
+    @Transactional
+    public List<Role> AllRoles (){
+        return  roleRepository.findAll();
+    }
+
+
     @Transactional
     @Override
     public void save(User user) {
@@ -53,9 +62,13 @@ public class UserServiceImt implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(User user, int id) {
-        User user1 = userRepository.findById(id).get();
+    public void updateUser(User user) {
+        User user1 = userRepository.findByUsername(user.getUsername()).get();
         user1.setUsername(user.getUsername());
+        user1.setAge(user.getAge());
+        user1.setCity(user.getCity());
+        user1.setEnabled(true);
+        userRepository.save(user1);
 
     }
 
