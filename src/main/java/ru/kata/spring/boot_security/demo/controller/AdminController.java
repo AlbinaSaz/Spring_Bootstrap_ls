@@ -39,6 +39,12 @@ public class AdminController {
     public String create(@ModelAttribute("user") User user,
                          @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
         Set<Role> roleSet = new HashSet<>();
+        if (userRole == null) {
+            roleSet.add(roleRepository.findById(1).get());
+            user.setRoles(roleSet);
+            userService.save(user);
+            return "redirect:/admin";
+        }
         if (userRole.contains("ROLE_ADMIN")) {
             roleSet.add(roleRepository.findById(2).get());
             user.setRoles(roleSet);
