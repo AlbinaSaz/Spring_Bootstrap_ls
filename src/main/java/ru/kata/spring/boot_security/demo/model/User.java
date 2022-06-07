@@ -7,9 +7,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -19,6 +24,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @NotEmpty(message = "Enter your name")
+    @Size(min = 2, max = 15, message = "name length is not correct")
     @Column(nullable = false)
     private String username;
     @Column
@@ -26,7 +33,7 @@ public class User implements UserDetails {
 
     @Column
     private String city;
-
+    @Min(value = 0, message = "age > 0")
     @Column
     private int age;
     @Column
@@ -35,7 +42,7 @@ public class User implements UserDetails {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToMany(cascade =
-            {       CascadeType.DETACH,
+            {CascadeType.DETACH,
                     CascadeType.MERGE,
                     CascadeType.REFRESH,
                     CascadeType.PERSIST
@@ -56,10 +63,14 @@ public class User implements UserDetails {
         this.age = age;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoles();
+    }
+
+    public String rolesString() {
+        String a = getRoles().iterator().next().getAuthority();
+        return a;
     }
 
     @Override

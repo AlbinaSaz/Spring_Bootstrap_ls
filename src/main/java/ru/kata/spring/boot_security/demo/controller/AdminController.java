@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.Service.UserServiceImt;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,8 +37,11 @@ public class AdminController {
     }
 
     @PostMapping("/new")
-    public String create(@ModelAttribute("user") User user,
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
+        if (bindingResult.hasErrors()){
+          return "redirect:/admin";
+        }
         Set<Role> roleSet = new HashSet<>();
         if (userRole == null) {
             roleSet.add(roleRepository.findById(1).get());
@@ -57,7 +62,10 @@ public class AdminController {
     }
 
     @PutMapping("/edit")
-    public String update(@ModelAttribute("user") User user, Model model, @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
+    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,Model model, @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
+       if (bindingResult.hasErrors()){
+           return "redirect:/admin";
+       }
         Set<Role> roles = new HashSet<>();
         if (userRole == null) {
             roles.add(roleRepository.findById(1).get());

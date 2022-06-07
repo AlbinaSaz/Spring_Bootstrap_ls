@@ -154,6 +154,7 @@
                                                                                             <label for="ageEdit"
                                                                                                    class="mb-0 font-weight-bold">Age</label>
                                                                                             <input type="number"
+                                                                                                   min="1" max="100"
                                                                                                    class="form-control"
                                                                                                    name="age"
                                                                                                    id="ageEdit"
@@ -327,7 +328,7 @@
                                                 <form>
                                                     <div class="form-group text-center mt-3 mb-3">
                                                         <label for="Username" class="mb-0 font-weight-bold">Username</label>
-                                                        <input type="text" th:field="*{username}" class="form-control"
+                                                        <input type="text"required th:field="*{username}" class="form-control"
                                                                id="Username">
                                                     </div>
                                                     <div class="form-group ">
@@ -337,8 +338,9 @@
                                                     </div>
                                                     <div class="form-group text-center">
                                                         <label for="age" class="mb-0 font-weight-bold">Age</label>
-                                                        <input type="number" th:field="*{age}" class="form-control"
+                                                        <input type="number" min="1" max="100" th:field="*{age}" class="form-control"
                                                                id="age">
+
                                                     </div>
                                                     <div class="form-group ">
                                                         <label for="password"
