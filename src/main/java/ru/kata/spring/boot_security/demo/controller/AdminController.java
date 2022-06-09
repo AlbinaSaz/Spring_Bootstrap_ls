@@ -1,10 +1,8 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.Service.UserServiceImt;
 import ru.kata.spring.boot_security.demo.model.Role;
@@ -12,82 +10,54 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-@Controller
-@RequestMapping("/admin")
+
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class AdminController {
     private final UserServiceImt userService;
     private final RoleRepository roleRepository;
 
+    @GetMapping("/admin/roles")
+    public List<Role> getRoles(){
+        List<Role> roles  =roleRepository.findAll();
+        System.out.println(roles);
+        return roles;
 
-    @GetMapping()
-    public String loadToUsersPage(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("userTable", userService.allUsers());
-        model.addAttribute("newUser", new User());
-        model.addAttribute("allRoles", userService.AllRoles());
-        model.addAttribute("sessionUser", user);
-        return "adminPage";
     }
 
-    @PostMapping("/new")
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-                         @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
-        if (bindingResult.hasErrors()){
-          return "redirect:/admin";
-        }
-        Set<Role> roleSet = new HashSet<>();
-        if (userRole == null) {
-            roleSet.add(roleRepository.findById(1).get());
-            user.setRoles(roleSet);
-            userService.save(user);
-            return "redirect:/admin";
-        }
-        if (userRole.contains("ROLE_ADMIN")) {
-            roleSet.add(roleRepository.findById(2).get());
-            user.setRoles(roleSet);
-        }
-        if (userRole.contains("ROLE_USER")) {
-            roleSet.add(roleRepository.findById(1).get());
-            user.setRoles(roleSet);
-        }
+    @GetMapping("/admin/users")
+    public List<User> getAllUsers (){
+      return  userService.allUsers();
+    }
+
+    @GetMapping ("/admin/users/{id}")
+    public User getUser (@PathVariable int id){
+       return userService.findUser(id);
+    }
+
+
+    @PostMapping(("/admin/users"))
+    public ResponseEntity<User> saveUser (@Valid @RequestBody User user){
+         System.out.println("POST REQUEST  " + user);
         userService.save(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok(user);
     }
 
-    @PutMapping("/edit")
-    public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,Model model, @RequestParam(value = "addRole", required = false) ArrayList<String> userRole) {
-       if (bindingResult.hasErrors()){
-           return "redirect:/admin";
-       }
-        Set<Role> roles = new HashSet<>();
-        if (userRole == null) {
-            roles.add(roleRepository.findById(1).get());
-            user.setRoles(roles);
-            userService.save(user);
-            return "redirect:/admin";
-        }
-        if (userRole.contains("ROLE_ADMIN")) {
-            roles.add(roleRepository.findById(2).get());
-            user.setRoles(roles);
-        }
-        if (userRole.contains("ROLE_USER")) {
-            roles.add(roleRepository.findById(1).get());
-            user.setRoles(roles);
-        }
+    @PutMapping("/admin/users")
+    public ResponseEntity <User> editUser (@RequestBody User user){
+        System.out.println(user);
         userService.updateUser(user);
-        return "redirect:/admin";
+        return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteUser(@PathVariable("id") int id) {
+    @DeleteMapping ("/admin/users/{id}")
+    public void deleteUserById (@PathVariable("id") int id){
+        User user = userService.findUser(id);
+        System.out.println("delete "+ user);
         userService.deleteUser(id);
-        return "redirect:/admin";
     }
 }
+//

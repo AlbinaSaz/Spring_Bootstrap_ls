@@ -13,6 +13,7 @@ import ru.kata.spring.boot_security.demo.repository.UserRepository;
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -42,8 +43,25 @@ public class UserServiceImt implements UserService {
 
 
     @Transactional
-    public List<Role> AllRoles (){
-        return  roleRepository.findAll();
+    public List<Role> AllRoles() {
+        return roleRepository.findAll();
+    }
+
+    @Transactional
+    public Role findById(Integer id) {
+
+        Optional<Role> roleOptional = roleRepository.findById(id);
+        return roleOptional.orElse(null);
+    }
+
+    @Transactional
+    public void deleteRole(Integer id) {
+        roleRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Role saveRole(Role role) {
+        return roleRepository.save(role);
     }
 
 
@@ -51,11 +69,11 @@ public class UserServiceImt implements UserService {
     @Override
     public void save(User user) {
         user.setEnabled(true);
-        Set<Role> roleSet = (Set<Role>) user.getAuthorities();
-        user.setCity(user.getCity());
-        user.setAge(user.getAge());
+//        Set<Role> roleSet = (Set<Role>) user.getAuthorities();
+//        user.setCity(user.getCity());
+//        user.setAge(user.getAge());
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(roleSet);
+//        user.setRoles(roleSet);
         userRepository.save(user);
     }
 
@@ -63,18 +81,19 @@ public class UserServiceImt implements UserService {
     @Transactional
     @Override
     public void updateUser(User user) {
-        User user1 = userRepository.findByUsername(user.getUsername()).get();
-        user1.setUsername(user.getUsername());
-        user1.setAge(user.getAge());
-        user1.setCity(user.getCity());
-        user1.setEnabled(true);
-        userRepository.save(user1);
 
-    }
+        if (user.getPassword().equals(findUser(user.getId()).getPassword())) {
+            user.setPassword(findUser(user.getId()).getPassword());
+        } else {
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
+        userRepository.save(user);
+
+}
 
     @Transactional
     @Override
-    public void deleteUser(int id) {
+    public void deleteUser(Integer id) {
         userRepository.deleteById(id);
 
     }

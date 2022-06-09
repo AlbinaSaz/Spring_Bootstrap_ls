@@ -11,7 +11,7 @@
 <body>
 <header>
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-        <span class="navbar-brand col-sm-3 col-md-2 mr-0" th:text="${user.username} + ' with roles: ' + ${user.rolesString()}"></span>
+        <span class="navbar-brand col-sm-3 col-md-2 mr-0" id="headerSpan"></span>
         <div>
             <ul class="navbar-nav px-3">
                 <li class="nav-item">
@@ -42,7 +42,7 @@
                 <div class="card-header ">
                     <h5>About user</h5>
                 </div>
-                <form th:object="${user}">
+                <form  id="formUser">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">
                             <div class="table-responsive">
@@ -51,20 +51,15 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Username</th>
-                                        <th>City</th>
+                                        <th>city</th>
                                         <th>Age</th>
                                         <th>Role</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td th:utext="${user.getId()}"></td>
-                                        <td th:utext="${user.getUsername()}"></td>
-                                        <td th:utext="${user.getCity()}"></td>
-                                        <td th:utext="${user.getAge()}"></td>
-                                        <td th:utext="${user.rolesString()}"></td>
+                                    <tr id="oneUser">
                                     </tr>
-                                    <tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -75,6 +70,15 @@
         </main>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+<script src="/JS/myUser.js"></script>
 </body>
 </html>

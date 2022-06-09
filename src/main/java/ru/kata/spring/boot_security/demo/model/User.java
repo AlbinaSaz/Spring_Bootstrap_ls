@@ -26,7 +26,7 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Enter your name")
     @Size(min = 2, max = 15, message = "name length is not correct")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
     @Column
     private String password;
@@ -40,12 +40,11 @@ public class User implements UserDetails {
     private boolean enabled;
 
     @EqualsAndHashCode.Exclude
-    @ToString.Exclude
     @ManyToMany(cascade =
             {CascadeType.DETACH,
                     CascadeType.MERGE,
                     CascadeType.REFRESH,
-                    CascadeType.PERSIST
+//                    CascadeType.PERSIST
             })
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "users_id"),
@@ -69,8 +68,10 @@ public class User implements UserDetails {
     }
 
     public String rolesString() {
-        String a = getRoles().iterator().next().getAuthority();
-        return a;
+        return getRoles().stream()
+                .map(Object::toString)
+                .map(p -> p.replace("ROLE_", " "))
+                .collect(Collectors.joining(", "));
     }
 
     @Override
@@ -85,7 +86,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return true;
     }
 
     @Override
